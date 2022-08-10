@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test pow', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
   async function testSqrt(input, expected, shape) {
     const builder = new MLGraphBuilder(context);
     const x = builder.input('x', {type: 'float32', dimensions: shape});
@@ -12,15 +15,15 @@ describe('test pow', function() {
     const graph = await builder.build({z});
     const inputs = {'x': new Float32Array(input)};
     const outputs = {'z': new Float32Array(utils.sizeOfShape(shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.z, expected);
   }
   it('sqrt 1d', async function() {
-    await testSqrt([1, 4, 9], [1, 2, 3], [3]);
+    testSqrt([1, 4, 9], [1, 2, 3], [3]);
   });
 
   it('sqrt 3d', async function() {
-    await testSqrt(
+    testSqrt(
         [
           0.33435354, 0.57139647, 0.03689031, 0.7820907,  0.7718887,
           0.17709309, 1.05624,    2.2693596,  1.0328789,  1.6043026,
@@ -61,7 +64,7 @@ describe('test pow', function() {
     const graph = await builder.build({z});
     const inputs = {'x': new Float32Array([1, 2, 3])};
     const outputs = {'z': new Float32Array(3)};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.z, [1., 32., 729.]);
   });
 
@@ -74,7 +77,7 @@ describe('test pow', function() {
     const graph = await builder.build({z});
     const inputs = {'x': new Float32Array([1, 2, 3])};
     const outputs = {'z': new Float32Array(3)};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.z, [1., 4., 9.]);
   });
 
@@ -87,7 +90,7 @@ describe('test pow', function() {
     const graph = await builder.build({z});
     const inputs = {'x': new Float32Array([1, 2, 3, 4, 5, 6])};
     const outputs = {'z': new Float32Array(utils.sizeOfShape([2, 3]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.z, [1., 4., 27., 4., 25., 216.]);
   });
 });

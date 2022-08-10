@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test tanh', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
   async function testTanh(input, expected, shape) {
     const builder = new MLGraphBuilder(context);
     const x = builder.input('x', {type: 'float32', dimensions: shape});
@@ -10,7 +13,7 @@ describe('test tanh', function() {
     const graph = await builder.build({y});
     const inputs = {'x': new Float32Array(input)};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected);
   }
   it('tanh 1d', async function() {

@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test gemm', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testGemm(A, B, expected, C = undefined, options = {}) {
     const builder = new MLGraphBuilder(context);
@@ -21,7 +24,7 @@ describe('test gemm', function() {
     const graph = await builder.build({c});
     const inputs = {'a': new Float32Array(A.value)};
     const outputs = {'c': new Float32Array(utils.sizeOfShape(expected.shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.c, expected.value);
   }
 

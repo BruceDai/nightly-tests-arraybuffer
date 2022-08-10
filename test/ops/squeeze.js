@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test squeeze', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testSqueeze(oldShape, axes, expectedShape) {
     const builder = new MLGraphBuilder(context);
@@ -16,7 +19,7 @@ describe('test squeeze', function() {
     }
     const inputs = {'x': inputBuffer};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(expectedShape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, inputBuffer);
   }
 

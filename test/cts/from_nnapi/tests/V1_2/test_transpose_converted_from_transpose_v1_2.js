@@ -3,7 +3,10 @@ import * as utils from '../../../../utils.js';
 
 /* eslint-disable max-len */
 describe('CTS converted from NNAPI CTS', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('test transpose converted from transpose_v1_2 test', async function() {
     // Converted test case (from: V1_2/transpose_v1_2.mod.py)
@@ -14,7 +17,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const output = builder.transpose(input);
     const graph = await builder.build({output});
     const outputs = {output: new Float32Array(utils.sizeOfShape([2, 2]))};
-    await graph.compute({'input': inputData}, outputs);
+    await context.compute(graph, {'input': inputData}, outputs);
     utils.checkValue(outputs.output, expected, utils.ctsFp32RestrictAccuracyCriteria);
   });
 
@@ -27,7 +30,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const output = builder.transpose(input);
     const graph = await builder.build({output});
     const outputs = {output: new Float32Array(utils.sizeOfShape([2, 2]))};
-    await graph.compute({'input': inputData}, outputs);
+    await context.compute(graph, {'input': inputData}, outputs);
     utils.checkValue(outputs.output, expected, utils.ctsFp32RelaxedAccuracyCriteria);
   });
 });

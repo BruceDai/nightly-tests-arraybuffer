@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test convTranspose2d', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testConvTranspose2d(
       input, filter, expected, options = {}, bias = undefined,
@@ -41,7 +44,7 @@ describe('test convTranspose2d', function() {
     const graph = await builder.build({y});
     const inputs = {'x': input.data};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(expected.shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected.data);
   }
 
@@ -1250,7 +1253,8 @@ describe('test convTranspose2d', function() {
         9, 20, 33, 24, 13, 6, 13, 21, 15, 8,
       ],
     };
-    await testConvTranspose2d(input, filter, expected, options, undefined, 'relu');
+    await testConvTranspose2d(
+        input, filter, expected, options, undefined, 'relu');
   });
 
   it('convTranspose2d bias activation nchw iohw', async function() {
@@ -1281,6 +1285,7 @@ describe('test convTranspose2d', function() {
         6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
       ],
     };
-    await testConvTranspose2d(input, filter, expected, options, bias, activation);
+    await testConvTranspose2d(
+        input, filter, expected, options, bias, activation);
   });
 });

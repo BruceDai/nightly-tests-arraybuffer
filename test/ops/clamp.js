@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test clamp', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testClamp(inputShape, inputValue, expected, options = {}) {
     const builder = new MLGraphBuilder(context);
@@ -11,7 +14,7 @@ describe('test clamp', function() {
     const graph = await builder.build({y});
     const inputs = {'x': new Float32Array(inputValue)};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(inputShape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected);
   }
 

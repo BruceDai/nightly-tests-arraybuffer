@@ -1,8 +1,11 @@
 'use strict';
 import * as utils from '../utils.js';
 
-describe('test hardSwish', function() {
-  const context = navigator.ml.createContext();
+describe('test hardSwish', async function() {
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('hardSwish', async function() {
     const builder = new MLGraphBuilder(context);
@@ -15,7 +18,7 @@ describe('test hardSwish', function() {
       ]),
     };
     const outputs = {'y': new Float32Array(utils.sizeOfShape([2, 3]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       0., 0., 0., 0.36, 2.991006, 3.001,
     ];

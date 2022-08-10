@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test reshape', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testReshape(oldShape, newShape, expectedShape) {
     const builder = new MLGraphBuilder(context);
@@ -19,7 +22,7 @@ describe('test reshape', function() {
       'y': new Float32Array(
           utils.sizeOfShape(expectedShape ? expectedShape : newShape)),
     };
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, inputBuffer);
   }
 

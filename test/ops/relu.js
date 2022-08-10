@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test relu', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('relu', async function() {
     const builder = new MLGraphBuilder(context);
@@ -26,7 +29,7 @@ describe('test relu', function() {
       ]),
     };
     const outputs = {'y': new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       0.,        0.6447428, 0.,         0.,         0.9777725, 0.,
       0.,        0.,        1.3725083,  0.,         0.,        0.,

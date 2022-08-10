@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test pool2d', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('maxPool2d default', async function() {
     const builder = new MLGraphBuilder(context);
@@ -15,7 +18,7 @@ describe('test pool2d', function() {
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 2, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [11, 12, 15, 16];
     utils.checkValue(outputs.y, expected);
   });
@@ -32,7 +35,7 @@ describe('test pool2d', function() {
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [11, 12, 15, 16];
     utils.checkValue(outputs.y, expected);
   });
@@ -49,7 +52,7 @@ describe('test pool2d', function() {
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 2, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [11, 12, 15, 16];
     utils.checkValue(outputs.y, expected);
   });
@@ -67,7 +70,7 @@ describe('test pool2d', function() {
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [11, 12, 15, 16];
     utils.checkValue(outputs.y, expected);
   });
@@ -86,7 +89,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 5, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       13, 14, 15, 15, 15, 18, 19, 20, 20, 20, 23, 24, 25,
       25, 25, 23, 24, 25, 25, 25, 23, 24, 25, 25, 25,
@@ -109,7 +112,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 5, 5, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       13, 14, 15, 15, 15, 18, 19, 20, 20, 20, 23, 24, 25,
       25, 25, 23, 24, 25, 25, 25, 23, 24, 25, 25, 25,
@@ -131,7 +134,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 5, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       13, 14, 15, 15, 15, 18, 19, 20, 20, 20, 23, 24, 25,
       25, 25, 23, 24, 25, 25, 25, 23, 24, 25, 25, 25,
@@ -158,7 +161,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 4, 4, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       9,
       11,
@@ -200,7 +203,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 3, 3, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       17,
       19,
@@ -235,7 +238,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 4, 4, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       17,
       19,
@@ -277,7 +280,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 3, 3, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       17,
       19,
@@ -312,7 +315,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 4, 4, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       17,
       19,
@@ -352,7 +355,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 4, 4, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       9,
       11,
@@ -389,7 +392,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 5, 5, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       13, 14, 15, 15, 15, 18, 19, 20, 20, 20, 23, 24, 25,
       25, 25, 23, 24, 25, 25, 25, 23, 24, 25, 25, 25,
@@ -411,7 +414,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 2, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [7, 9, 17, 19];
     utils.checkValue(outputs.y, expected);
   });
@@ -431,7 +434,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [7, 9, 17, 19];
     utils.checkValue(outputs.y, expected);
   });
@@ -447,7 +450,7 @@ describe('test pool2d', function() {
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 2, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [6, 7, 10, 11];
     utils.checkValue(outputs.y, expected);
   });
@@ -464,7 +467,7 @@ describe('test pool2d', function() {
           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [6, 7, 10, 11];
     utils.checkValue(outputs.y, expected);
   });
@@ -484,7 +487,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 5, 5, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       7,    7.5, 8,    8.5, 9,    9.5, 10,   10.5, 11,   11.5, 12,   12.5, 13,
       13.5, 14,  14.5, 15,  15.5, 16,  16.5, 17,   17.5, 18,   18.5, 19,
@@ -507,7 +510,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 5, 5, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       7,    7.5, 8,    8.5, 9,    9.5, 10,   10.5, 11,   11.5, 12,   12.5, 13,
       13.5, 14,  14.5, 15,  15.5, 16,  16.5, 17,   17.5, 18,   18.5, 19,
@@ -529,7 +532,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 5, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       7,    7.5, 8,    8.5, 9,    9.5, 10,   10.5, 11,   11.5, 12,   12.5, 13,
       13.5, 14,  14.5, 15,  15.5, 16,  16.5, 17,   17.5, 18,   18.5, 19,
@@ -552,7 +555,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 5, 5, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       7,    7.5, 8,    8.5, 9,    9.5, 10,   10.5, 11,   11.5, 12,   12.5, 13,
       13.5, 14,  14.5, 15,  15.5, 16,  16.5, 17,   17.5, 18,   18.5, 19,
@@ -579,7 +582,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 4, 4, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       5,
       6,
@@ -621,7 +624,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 3, 3, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       9,
       10.5,
@@ -656,7 +659,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 4, 4, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       9,
       10.5,
@@ -678,40 +681,51 @@ describe('test pool2d', function() {
     utils.checkValue(outputs.y, expected);
   });
 
-  it('averagePool2d autoPad explicit roundingType=floor nhwc', async function() {
-    const builder = new MLGraphBuilder(context);
-    const x = builder.input('x', {type: 'float32', dimensions: [1, 7, 7, 1]});
-    const windowDimensions = [4, 4];
-    const padding = [1, 1, 1, 1];
-    const strides = [2, 2];
-    const autoPad = 'explicit';
-    const layout = 'nhwc';
-    const roundingType = 'floor';
-    const y = builder.averagePool2d(
-        x, {windowDimensions, autoPad, padding, strides, layout, roundingType});
-    const graph = await builder.build({y});
-    const inputs = {
-      'x': new Float32Array([
-        1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17,
-        18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
-        35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-      ]),
-    };
-    const outputs = {y: new Float32Array(utils.sizeOfShape([1, 3, 3, 1]))};
-    await graph.compute(inputs, outputs);
-    const expected = [
-      9,
-      10.5,
-      12.5,
-      19.5,
-      21,
-      23,
-      33.5,
-      35,
-      37,
-    ];
-    utils.checkValue(outputs.y, expected);
-  });
+  it('averagePool2d autoPad explicit roundingType=floor nhwc',
+      async function() {
+        const builder = new MLGraphBuilder(context);
+        const x =
+          builder.input('x', {type: 'float32', dimensions: [1, 7, 7, 1]});
+        const windowDimensions = [4, 4];
+        const padding = [1, 1, 1, 1];
+        const strides = [2, 2];
+        const autoPad = 'explicit';
+        const layout = 'nhwc';
+        const roundingType = 'floor';
+        const y = builder.averagePool2d(
+            x,
+            {
+              windowDimensions,
+              autoPad,
+              padding,
+              strides,
+              layout,
+              roundingType,
+            },
+        );
+        const graph = await builder.build({y});
+        const inputs = {
+          'x': new Float32Array([
+            1,  2,  3,  4,  5,  6,  7,  8,  9,  10, 11, 12, 13, 14, 15, 16, 17,
+            18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+            35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
+          ]),
+        };
+        const outputs = {y: new Float32Array(utils.sizeOfShape([1, 3, 3, 1]))};
+        await context.compute(graph, inputs, outputs);
+        const expected = [
+          9,
+          10.5,
+          12.5,
+          19.5,
+          21,
+          23,
+          33.5,
+          35,
+          37,
+        ];
+        utils.checkValue(outputs.y, expected);
+      });
 
   it('averagePool2d autoPad explicit roundingType=ceil nhwc', async function() {
     const builder = new MLGraphBuilder(context);
@@ -733,7 +747,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 4, 4, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       9,
       10.5,
@@ -773,7 +787,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 4, 4, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       5,
       6,
@@ -809,7 +823,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [4, 6, 14, 16];
     utils.checkValue(outputs.y, expected);
   });
@@ -829,7 +843,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [4, 6, 14, 16];
     utils.checkValue(outputs.y, expected);
   });
@@ -859,7 +873,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 3, 1, 1]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [0.07170041, 0.05194739, 0.07117923];
     utils.checkValue(outputs.y, expected);
   });
@@ -890,7 +904,7 @@ describe('test pool2d', function() {
       ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 3]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [0.07170041, 0.05194739, 0.07117923];
     utils.checkValue(outputs.y, expected);
   });
@@ -906,7 +920,7 @@ describe('test pool2d', function() {
           [-1, 2, 0, 3, -2, 0, 0, -4]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 3]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [1.5, 1, 2.5];
     utils.checkValue(outputs.y, expected);
   });
@@ -923,7 +937,7 @@ describe('test pool2d', function() {
           [-1, 2, 0, 3, -2, 0, 0, -4]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [1.5, 2.5];
     utils.checkValue(outputs.y, expected);
   });
@@ -941,7 +955,7 @@ describe('test pool2d', function() {
           [-1, 2, 0, 3, -2, 0, 0, -4]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [1.5, 2.5];
     utils.checkValue(outputs.y, expected);
   });
@@ -959,7 +973,7 @@ describe('test pool2d', function() {
           [-1, 2, 0, 3, -2, 0, 0, -4]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [1.5, 2.5];
     utils.checkValue(outputs.y, expected);
   });
@@ -983,7 +997,7 @@ describe('test pool2d', function() {
           ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 3, 3]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       10.692676544189453,
       12.006942749023438,
@@ -1017,7 +1031,7 @@ describe('test pool2d', function() {
           ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 4, 4]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       10.692676544189453,
       12.006942749023438,
@@ -1058,7 +1072,7 @@ describe('test pool2d', function() {
           ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 3, 3]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       10.692676544189453,
       12.006942749023438,
@@ -1092,7 +1106,7 @@ describe('test pool2d', function() {
           ]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 4, 4]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       10.692676544189453,
       12.006942749023438,
@@ -1128,7 +1142,7 @@ describe('test pool2d', function() {
           [-1, 2, 0, 3, -2, 0, 0, -4]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [1.5, 2.5];
     utils.checkValue(outputs.y, expected);
   });
@@ -1146,7 +1160,7 @@ describe('test pool2d', function() {
           [-1, 2, 0, 3, -2, 0, 0, -4]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [1.5, 2.5];
     utils.checkValue(outputs.y, expected);
   });
@@ -1164,7 +1178,7 @@ describe('test pool2d', function() {
           [-1, 2, 0, 3, -2, 0, 0, -4]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [1.5, 2.5];
     utils.checkValue(outputs.y, expected);
   });
@@ -1183,7 +1197,7 @@ describe('test pool2d', function() {
           [-1, 2, 0, 3, -2, 0, 0, -4]),
     };
     const outputs = {y: new Float32Array(utils.sizeOfShape([1, 1, 1, 2]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [1.5, 2.5];
     utils.checkValue(outputs.y, expected);
   });

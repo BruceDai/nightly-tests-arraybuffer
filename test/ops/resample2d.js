@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test resample2d', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testResample2d(input, options, expected) {
     const builder = new MLGraphBuilder(context);
@@ -11,7 +14,7 @@ describe('test resample2d', function() {
     const graph = await builder.build({y});
     const inputs = {'x': new Float32Array(input.values)};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(expected.shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected.values);
   }
 
@@ -48,39 +51,40 @@ describe('test resample2d', function() {
         });
   });
 
-  it('resample2d upsample scales linear with explict axes [2, 3]', async function() {
-    await testResample2d(
-        {
-          shape: [1, 1, 2, 2],
-          values: [1, 2, 3, 4],
-        },
-        {
-          mode: 'linear',
-          scales: [2.0, 2.0],
-          axes: [2, 3],
-        },
-        {
-          shape: [1, 1, 4, 4],
-          values: [
-            1.,
-            1.25,
-            1.75,
-            2.,
-            1.5,
-            1.75,
-            2.25,
-            2.5,
-            2.5,
-            2.75,
-            3.25,
-            3.5,
-            3.,
-            3.25,
-            3.75,
-            4.,
-          ],
-        });
-  });
+  it('resample2d upsample scales linear with explict axes [2, 3]',
+      async function() {
+        await testResample2d(
+            {
+              shape: [1, 1, 2, 2],
+              values: [1, 2, 3, 4],
+            },
+            {
+              mode: 'linear',
+              scales: [2.0, 2.0],
+              axes: [2, 3],
+            },
+            {
+              shape: [1, 1, 4, 4],
+              values: [
+                1.,
+                1.25,
+                1.75,
+                2.,
+                1.5,
+                1.75,
+                2.25,
+                2.5,
+                2.5,
+                2.75,
+                3.25,
+                3.5,
+                3.,
+                3.25,
+                3.75,
+                4.,
+              ],
+            });
+      });
 
   it('resample2d upsample scales linear axes [0, 1]', async function() {
     await testResample2d(

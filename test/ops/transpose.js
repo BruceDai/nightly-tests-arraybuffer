@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test transpose', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function checkTranspose(
       inputShape, inputData, expectedShape, expected, permutation = undefined) {
@@ -12,7 +15,7 @@ describe('test transpose', function() {
     const graph = await builder.build({y});
     const inputs = {'x': new Float32Array(inputData)};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(expectedShape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected);
   }
 

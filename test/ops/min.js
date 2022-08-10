@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test min', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('min', async function() {
     const builder = new MLGraphBuilder(context);
@@ -41,7 +44,7 @@ describe('test min', function() {
       ]),
     };
     const outputs = {c: new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       -0.3013072,  -0.09710764, 0.11072686,  0.57673335,  -0.9459303,
       -0.4660466,  -0.51731133, -1.1046865,  -0.7237214,  -2.4551184,
@@ -89,7 +92,7 @@ describe('test min', function() {
       ]),
     };
     const outputs = {c: new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       0.09259097,  -1.302236,  0.27485028,  0.83395857,  -0.83993983,
       -0.10002025, -1.302236,  0.27485028,  0.7070375,   -0.83993983,

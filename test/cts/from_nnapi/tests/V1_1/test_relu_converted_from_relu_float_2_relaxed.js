@@ -3,7 +3,10 @@ import * as utils from '../../../../utils.js';
 
 /* eslint-disable max-len */
 describe('CTS converted from NNAPI CTS', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('test relu converted from relu_float_2_relaxed test', async function() {
     // Converted test case (from: V1_1/relu_float_2_relaxed.mod.py)
@@ -14,7 +17,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const output = builder.relu(input);
     const graph = await builder.build({output});
     const outputs = {output: new Float32Array(utils.sizeOfShape([2, 64, 40, 2]))};
-    await graph.compute({'input': inputData}, outputs);
+    await context.compute(graph, {'input': inputData}, outputs);
     utils.checkValue(outputs.output, expected, utils.ctsFp32RelaxedAccuracyCriteria);
   });
 });

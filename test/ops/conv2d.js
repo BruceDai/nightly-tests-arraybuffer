@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test conv2d', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testConv2d(
       input, filter, expected, options = {}, bias = undefined,
@@ -41,7 +44,7 @@ describe('test conv2d', function() {
     const graph = await builder.build({y});
     const inputs = {'x': input.data};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(expected.shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected.data);
   }
 
@@ -1988,7 +1991,8 @@ describe('test conv2d', function() {
       shape: [1, 4, 1, 1],
       data: [6, 6, 6, 0],
     };
-    await testConv2d(input, filter, expected, options, undefined, 'relu6', true);
+    await testConv2d(
+        input, filter, expected, options, undefined, 'relu6', true);
   });
 
   it('fused depthwise conv2d explicit autoPad', async function() {
@@ -2081,7 +2085,8 @@ describe('test conv2d', function() {
         0,
       ],
     };
-    await testConv2d(input, filter, expected, options, undefined, 'relu6', true);
+    await testConv2d(
+        input, filter, expected, options, undefined, 'relu6', true);
   });
 
   it('fused depthwise conv2d same-upper autoPad', async function() {
@@ -2149,7 +2154,8 @@ describe('test conv2d', function() {
       autoPad: 'same-upper',
     };
     await testConv2d(input, filter, expected, options);
-    await testConv2d(input, filter, expected, options, undefined, 'relu', true);
+    await testConv2d(
+        input, filter, expected, options, undefined, 'relu', true);
     expected = {
       shape: [1, 2, 3, 3],
       data: [
@@ -2173,7 +2179,8 @@ describe('test conv2d', function() {
         0,
       ],
     };
-    await testConv2d(input, filter, expected, options, undefined, 'relu6', true);
+    await testConv2d(
+        input, filter, expected, options, undefined, 'relu6', true);
   });
 
   it('fused depthwise conv2d same-lower autoPad', async function() {
@@ -2241,7 +2248,8 @@ describe('test conv2d', function() {
       autoPad: 'same-lower',
     };
     await testConv2d(input, filter, expected, options);
-    await testConv2d(input, filter, expected, options, undefined, 'relu', true);
+    await testConv2d(
+        input, filter, expected, options, undefined, 'relu', true);
     expected = {
       shape: [1, 2, 3, 3],
       data: [
@@ -2265,7 +2273,8 @@ describe('test conv2d', function() {
         6,
       ],
     };
-    await testConv2d(input, filter, expected, options, undefined, 'relu6', true);
+    await testConv2d(
+        input, filter, expected, options, undefined, 'relu6', true);
   });
 
   it('fused conv2d with padding default', async function() {

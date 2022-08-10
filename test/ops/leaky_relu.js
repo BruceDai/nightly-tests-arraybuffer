@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test leakyRelu', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testLeakyRelu(input, expected, options = {}) {
     const builder = new MLGraphBuilder(context);
@@ -11,7 +14,7 @@ describe('test leakyRelu', function() {
     const graph = await builder.build({y});
     const inputs = {'x': new Float32Array(input.value)};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(input.shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected);
   }
 

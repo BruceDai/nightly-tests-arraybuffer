@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test mul', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('mul input and constant', async function() {
     const builder = new MLGraphBuilder(context);
@@ -44,7 +47,7 @@ describe('test mul', function() {
       ]),
     };
     const outputs = {c: new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       1.1491189e+00,  9.4631165e-03,  1.6490275e+00,  -2.4890469e-02,
       8.1811851e-01,  1.6337387e-01,  -7.8853898e-02, -1.2602202e+00,
@@ -105,7 +108,7 @@ describe('test mul', function() {
       ]),
     };
     const outputs = {c: new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       1.1491189e+00,  9.4631165e-03,  1.6490275e+00,  -2.4890469e-02,
       8.1811851e-01,  1.6337387e-01,  -7.8853898e-02, -1.2602202e+00,
@@ -156,7 +159,7 @@ describe('test mul', function() {
       ]),
     };
     const outputs = {c: new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       -0.05412592, 0.192414,    1.707958,    -0.31375682, -0.7771366,
       0.9440262,   0.2743106,   3.045193,    -1.1200235,  -0.37519363,

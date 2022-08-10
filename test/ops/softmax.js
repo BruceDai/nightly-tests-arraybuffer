@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test softmax', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('softmax', async function() {
     const builder = new MLGraphBuilder(context);
@@ -26,7 +29,7 @@ describe('test softmax', function() {
       ]),
     };
     const outputs = {'y': new Float32Array(utils.sizeOfShape([3, 4]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       0.32165375,
       0.36157736,

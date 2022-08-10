@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test split', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testSplit(
       inputShape, inputValue, expectedArray, splits, axis = undefined) {
@@ -21,7 +24,7 @@ describe('test split', function() {
       outputs[`split${i}`] =
           new Float32Array(utils.sizeOfShape(expectedArray[i].shape));
     }
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     for (let i = 0; i < splittedOperands.length; ++i) {
       utils.checkValue(outputs[`split${i}`], expectedArray[i].value);
     }

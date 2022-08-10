@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test element-wise unary operations', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
   async function test(op, input, expected, shape) {
     const builder = new MLGraphBuilder(context);
     const x = builder.input('x', {type: 'float32', dimensions: shape});
@@ -10,23 +13,23 @@ describe('test element-wise unary operations', function() {
     const graph = await builder.build({y});
     const inputs = {'x': new Float32Array(input)};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected);
   }
 
   it('abs', async function() {
     await test('abs', [-1, 0, 1], [1, 0, 1], [3]);
-    await test(
+    test(
         'abs',
         [-1.1, 0, 1.1, 2.2, 0, -2.2],
         [1.1, 0, 1.1, 2.2, 0, 2.2],
         [2, 3]);
-    await test(
+    test(
         'abs',
         [-1.1, 0, 1.1, 2.2, 0, -2.2],
         [1.1, 0, 1.1, 2.2, 0, 2.2],
         [1, 2, 3]);
-    await test(
+    test(
         'abs',
         [-1.1, 0, 1.1, 2.2, 0, -2.2],
         [1.1, 0, 1.1, 2.2, 0, 2.2],
@@ -35,17 +38,17 @@ describe('test element-wise unary operations', function() {
 
   it('ceil', async function() {
     await test('ceil', [-1.1, 0, 1.1], [-1, 0, 2], [3]);
-    await test(
+    test(
         'ceil',
         [-1.1, 0, 1.1, -2.2, 0, 2.2],
         [-1, 0, 2, -2, 0, 3],
         [2, 3]);
-    await test(
+    test(
         'ceil',
         [-1.1, 0, 1.1, -2.2, 0, 2.2],
         [-1, 0, 2, -2, 0, 3],
         [1, 2, 3]);
-    await test(
+    test(
         'ceil',
         [-1.1, 0, 1.1, -2.2, 0, 2.2],
         [-1, 0, 2, -2, 0, 3],
@@ -53,12 +56,12 @@ describe('test element-wise unary operations', function() {
   });
 
   it('cos', async function() {
-    await test(
+    test(
         'cos',
         [1.4124068, 1.9740626, -0.06506752, 0.73539704],
         [0.15772809, -0.39242464, 0.99788386, 0.74156445],
         [4]);
-    await test(
+    test(
         'cos',
         [
           1.4124068,   1.9740626,  -0.06506752, 0.73539704,
@@ -71,7 +74,7 @@ describe('test element-wise unary operations', function() {
           0.47485894, 0.7882008,   0.9769663,   0.75491464,
         ],
         [3, 4]);
-    await test(
+    test(
         'cos',
         [
           1.4124068,   1.9740626,
@@ -90,7 +93,7 @@ describe('test element-wise unary operations', function() {
           0.9769663,  0.75491464,
         ],
         [3, 2, 2]);
-    await test(
+    test(
         'cos',
         [
           1.4124068,
@@ -125,7 +128,7 @@ describe('test element-wise unary operations', function() {
 
   it('exp', async function() {
     await test('exp', [-1, 0, 1], [0.36787945, 1., 2.71828175], [3]);
-    await test(
+    test(
         'exp',
         [
           0.3143407, 0.03632548, 0.5354084,  -0.5000897,
@@ -138,7 +141,7 @@ describe('test element-wise unary operations', function() {
           3.999188,  0.7449597,  0.22166772, 0.6266599,
         ],
         [3, 4]);
-    await test(
+    test(
         'exp',
         [
           0.3143407,   0.03632548,  0.5354084,   -0.5000897,  1.2028517,
@@ -169,7 +172,7 @@ describe('test element-wise unary operations', function() {
           1.1191761,  1.4463972,  0.8294177,  1.0801651,  18.386492,
         ],
         [3, 4, 5]);
-    await test(
+    test(
         'exp',
         [
           0.3143407,   0.03632548,  0.5354084,   -0.5000897,  1.2028517,
@@ -204,17 +207,17 @@ describe('test element-wise unary operations', function() {
 
   it('floor', async function() {
     await test('floor', [-1.1, 0, 1.1], [-2, 0, 1], [3]);
-    await test(
+    test(
         'floor',
         [-1.1, 0, 1.1, -2.2, 0, 2.2],
         [-2, 0, 1, -3, 0, 2],
         [2, 3]);
-    await test(
+    test(
         'floor',
         [-1.1, 0, 1.1, -2.2, 0, 2.2],
         [-2, 0, 1, -3, 0, 2],
         [1, 2, 3]);
-    await test(
+    test(
         'floor',
         [-1.1, 0, 1.1, -2.2, 0, 2.2],
         [-2, 0, 1, -3, 0, 2],
@@ -222,12 +225,12 @@ describe('test element-wise unary operations', function() {
   });
 
   it('log', async function() {
-    await test(
+    test(
         'log',
         [1.4599811, 0.34325936, 1.0420732],
         [0.37842348, -1.069269, 0.04121224],
         [3]);
-    await test(
+    test(
         'log',
         [
           1.4599811,  0.34325936, 1.0420732, 0.10867598,
@@ -240,7 +243,7 @@ describe('test element-wise unary operations', function() {
           -0.37004486, 0.6185112, 0.34275877, -2.7539184,
         ],
         [3, 4]);
-    await test(
+    test(
         'log',
         [
           1.4599811,  0.34325936, 1.0420732,  0.10867598, 0.39999306,
@@ -271,7 +274,7 @@ describe('test element-wise unary operations', function() {
           0.46755916,  -0.99082065, 0.64478815,  0.31843665,  -0.8416116,
         ],
         [3, 4, 5]);
-    await test(
+    test(
         'log',
         [
           1.4599811,  0.34325936, 1.0420732,  0.10867598, 0.39999306,
@@ -306,17 +309,17 @@ describe('test element-wise unary operations', function() {
 
   it('neg', async function() {
     await test('neg', [-1.1, 0, 1.1], [1.1, 0, -1.1], [3]);
-    await test(
+    test(
         'neg',
         [-1, 0, 1.1, -2.2, 0, 2],
         [1, 0, -1.1, 2.2, 0, -2],
         [2, 3]);
-    await test(
+    test(
         'neg',
         [-1, 0, 1.1, -2.2, 0, 2],
         [1, 0, -1.1, 2.2, 0, -2],
         [1, 2, 3]);
-    await test(
+    test(
         'neg',
         [-1, 0, 1.1, -2.2, 0, 2],
         [1, 0, -1.1, 2.2, 0, -2],
@@ -324,12 +327,12 @@ describe('test element-wise unary operations', function() {
   });
 
   it('sin', async function() {
-    await test(
+    test(
         'sin',
         [1.4124068, 1.9740626, -0.06506752, 0.73539704],
         [0.98748258, 0.91978414, -0.06502162, 0.67088164],
         [4]);
-    await test(
+    test(
         'sin',
         [
           1.4124068,   1.9740626,  -0.06506752, 0.73539704,
@@ -342,7 +345,7 @@ describe('test element-wise unary operations', function() {
           -0.88006193, 0.61541814, 0.21339342,  -0.65582306,
         ],
         [3, 4]);
-    await test(
+    test(
         'sin',
         [
           1.4124068,   1.9740626,
@@ -361,7 +364,7 @@ describe('test element-wise unary operations', function() {
           0.21339342,  -0.65582306,
         ],
         [3, 2, 2]);
-    await test(
+    test(
         'sin',
         [
           1.4124068,
@@ -395,12 +398,12 @@ describe('test element-wise unary operations', function() {
   });
 
   it('tan', async function() {
-    await test(
+    test(
         'tan',
         [1.4124068, 1.9740626, -0.06506752, 0.73539704],
         [6.26066374, -2.34384875, -0.0651595, 0.9046842],
         [4]);
-    await test(
+    test(
         'tan',
         [
           1.4124068,   1.9740626,  -0.06506752, 0.73539704,
@@ -413,7 +416,7 @@ describe('test element-wise unary operations', function() {
           -1.85331238,  0.78078852, 0.21842454, -0.86873803,
         ],
         [3, 4]);
-    await test(
+    test(
         'tan',
         [
           1.4124068,   1.9740626,
@@ -432,7 +435,7 @@ describe('test element-wise unary operations', function() {
           0.21842454,  -0.86873803,
         ],
         [3, 2, 2]);
-    await test(
+    test(
         'tan',
         [
           1.4124068,

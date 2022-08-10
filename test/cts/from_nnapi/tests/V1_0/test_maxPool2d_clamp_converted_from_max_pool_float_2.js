@@ -3,7 +3,10 @@ import * as utils from '../../../../utils.js';
 
 /* eslint-disable max-len */
 describe('CTS converted from NNAPI CTS', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('test maxPool2d + clamp converted from max_pool_float_2 test', async function() {
     // Converted test case (from: V1_0/max_pool_float_2.mod.py)
@@ -18,7 +21,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const output = builder.clamp(interOut0);
     const graph = await builder.build({output});
     const outputs = {output: new Float32Array(utils.sizeOfShape([5, 2, 3, 3]))};
-    await graph.compute({'i0': i0Data}, outputs);
+    await context.compute(graph, {'i0': i0Data}, outputs);
     utils.checkValue(outputs.output, expected, utils.ctsFp32RestrictAccuracyCriteria);
   });
 });

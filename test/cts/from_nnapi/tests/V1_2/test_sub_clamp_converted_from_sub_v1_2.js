@@ -3,7 +3,10 @@ import * as utils from '../../../../utils.js';
 
 /* eslint-disable max-len */
 describe('CTS converted from NNAPI CTS', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('test sub + clamp converted from sub_v1_2_none test', async function() {
     // Converted test case (from: V1_2/sub_v1_2.mod.py)
@@ -17,7 +20,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const output0 = builder.clamp(interOut0);
     const graph = await builder.build({output0});
     const outputs = {output0: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute({'input0': input0Data, 'input1': input1Data}, outputs);
+    await context.compute(graph, {'input0': input0Data, 'input1': input1Data}, outputs);
     utils.checkValue(outputs.output0, expected, utils.ctsFp32RestrictAccuracyCriteria);
   });
 
@@ -33,7 +36,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const output0 = builder.relu(interOut0);
     const graph = await builder.build({output0});
     const outputs = {output0: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute({'input0': input0Data, 'input1': input1Data}, outputs);
+    await context.compute(graph, {'input0': input0Data, 'input1': input1Data}, outputs);
     utils.checkValue(outputs.output0, expected, utils.ctsFp32RestrictAccuracyCriteria);
   });
 
@@ -49,7 +52,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const output0 = builder.clamp(interOut0, {minValue: -1, maxValue: 1});
     const graph = await builder.build({output0});
     const outputs = {output0: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute({'input0': input0Data, 'input1': input1Data}, outputs);
+    await context.compute(graph, {'input0': input0Data, 'input1': input1Data}, outputs);
     utils.checkValue(outputs.output0, expected, utils.ctsFp32RestrictAccuracyCriteria);
   });
 
@@ -65,7 +68,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const output0 = builder.clamp(interOut0, {minValue: 0, maxValue: 6});
     const graph = await builder.build({output0});
     const outputs = {output0: new Float32Array(utils.sizeOfShape([1, 2, 2, 1]))};
-    await graph.compute({'input0': input0Data, 'input1': input1Data}, outputs);
+    await context.compute(graph, {'input0': input0Data, 'input1': input1Data}, outputs);
     utils.checkValue(outputs.output0, expected, utils.ctsFp32RestrictAccuracyCriteria);
   });
 });

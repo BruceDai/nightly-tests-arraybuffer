@@ -750,7 +750,7 @@ def DumpCtsTest(example, test, fused):
             outputStr = ', '.join(outputNameBufferList)
             IndentedPrint(
                 "const outputs = {%s};" % outputStr, indent=4, file=test)            
-        IndentedPrint("await graph.compute({%s}, outputs);" % \
+        IndentedPrint("await context.compute(graph, {%s}, outputs);" % \
                       ', '.join(computeParamsList), indent=4, file=test)
         # Check compute output
         criteria = 'utils.ctsFp32RestrictAccuracyCriteria'

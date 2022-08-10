@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test concat', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testConcatInputs(tensors, expected) {
     const builder = new MLGraphBuilder(context);
@@ -17,7 +20,7 @@ describe('test concat', function() {
     const outputs = {
       'output': new Float32Array(utils.sizeOfShape(expected.shape)),
     };
-    await graph.compute(namedInputs, outputs);
+    await context.compute(graph, namedInputs, outputs);
     utils.checkValue(outputs.output, expected.value);
   }
 

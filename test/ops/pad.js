@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test pad', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   async function testPad(input, paddings, options, expected) {
     const builder = new MLGraphBuilder(context);
@@ -14,7 +17,7 @@ describe('test pad', function() {
     const graph = await builder.build({y});
     const inputs = {'x': new Float32Array(input.values)};
     const outputs = {'y': new Float32Array(utils.sizeOfShape(expected.shape))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     utils.checkValue(outputs.y, expected.values);
   }
 

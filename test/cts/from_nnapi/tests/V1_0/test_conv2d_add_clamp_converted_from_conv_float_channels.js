@@ -3,7 +3,10 @@ import * as utils from '../../../../utils.js';
 
 /* eslint-disable max-len */
 describe('CTS converted from NNAPI CTS', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('test conv2d + add + clamp converted from conv_float_channels test', async function() {
     // Converted test case (from: V1_0/conv_float_channels.mod.py)
@@ -20,7 +23,7 @@ describe('CTS converted from NNAPI CTS', function() {
     const op4 = builder.clamp(interOut1);
     const graph = await builder.build({op4});
     const outputs = {op4: new Float32Array(utils.sizeOfShape([1, 1, 1, 3]))};
-    await graph.compute({'op1': op1Data}, outputs);
+    await context.compute(graph, {'op1': op1Data}, outputs);
     utils.checkValue(outputs.op4, expected, utils.ctsFp32RestrictAccuracyCriteria);
   });
 });

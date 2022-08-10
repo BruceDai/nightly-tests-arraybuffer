@@ -2,7 +2,10 @@
 import * as utils from '../utils.js';
 
 describe('test add', function() {
-  const context = navigator.ml.createContext();
+  let context;
+  before(async () => {
+    context = await navigator.ml.createContext();
+  });
 
   it('add constant and input', async function() {
     const builder = new MLGraphBuilder(context);
@@ -41,7 +44,7 @@ describe('test add', function() {
       ]),
     };
     const outputs = {c: new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       -0.48879138, -2.0812354,  0.6382897,   0.07346585,  -0.93846387,
       2.9300475,   0.84765005,  1.2585825,   -1.7465117,  2.0591164,
@@ -96,7 +99,7 @@ describe('test add', function() {
       ]),
     };
     const outputs = {c: new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       -0.48879138, -2.0812354,  0.6382897,   0.07346585,  -0.93846387,
       2.9300475,   0.84765005,  1.2585825,   -1.7465117,  2.0591164,
@@ -144,7 +147,7 @@ describe('test add', function() {
       ]),
     };
     const outputs = {c: new Float32Array(utils.sizeOfShape([3, 4, 5]))};
-    await graph.compute(inputs, outputs);
+    await context.compute(graph, inputs, outputs);
     const expected = [
       0.5484205,   1.7485408, -2.6178582, -0.7418642,  0.32369673,
       2.123247,    1.7987677, -3.585476,  0.0313431,   0.7035562,
